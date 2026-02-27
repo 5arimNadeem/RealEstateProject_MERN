@@ -80,3 +80,15 @@ export const google = async (req, res, next) => {
         next(error)
     }
 }
+
+
+// we are just clearing the cookie in it because it the signout fucntion and after signout we want the user to loose the information in the browser and no one can access the old information that was in the cookie before for ensureing the security of the user and the application reliabilty
+export const signOut = async (req, res, next) => {
+    try {
+
+        res.clearCookie('access_token')
+        res.status(200).json('user has been logged out')
+    } catch (error) {
+        next(error)
+    }
+}
