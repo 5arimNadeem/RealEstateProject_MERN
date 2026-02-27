@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
+import authRouter from './routes/listing.route.js'
 import cookieParser from 'cookie-parser'
 
 mongoose.connect(process.env.MONGO_DB_URL)
@@ -128,6 +129,7 @@ app.listen(process.env.PORT, () => console.log('server is running ' + process.en
 
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/listing', listingRouter)
 
 // middleware 
 
