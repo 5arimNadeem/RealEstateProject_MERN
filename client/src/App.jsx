@@ -7,6 +7,7 @@ import About from './pages/About'
 import Profile from './pages/Profile'
 import Header from './components/Header'
 import PrivateRoute from './components/PrivateRoute'
+import CreateListing from './pages/CreateListing'
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         {/* it is making the profile section secure only when the sign-in will be made the profile section will be displayed otherwise these are not going to be displayed */}
         <Route element={<PrivateRoute />} >
           <Route path='/profile' element={<Profile />} />
+          <Route path='/create-listing' element={<CreateListing />} />
         </Route>
       </Routes>
     </BrowserRouter>
