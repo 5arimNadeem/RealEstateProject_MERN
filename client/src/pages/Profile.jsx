@@ -6,6 +6,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase.js';
 import { deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice.js';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   /* this is the beauty of useRef kii kaa uss mai ham na kisi orr componenet koo liya orr uss koo uss kii functionality dai dii bhai akheer nhi hoo gaiya  */
@@ -107,15 +108,15 @@ const Profile = () => {
       dispatch(signOutUserStart())
       const res = await fetch('/api/auth/signout')
       const data = await res.json()
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(deleteUserFailure(data.message))
         return;
       }
       dispatch(deleteUserSuccess(data))
     } catch (error) {
-        dispatch(deleteUserFailure(data.message))
+      dispatch(deleteUserFailure(data.message))
     }
-  } 
+  }
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -183,6 +184,7 @@ const Profile = () => {
           {/* what is the function of the useSelector and what is this line of code doing. what is the purpose of it and how it related with the useSelector  : chekc the note for it as well  */}
           {loading ? 'loading' : 'update'}
         </button>
+        <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95' to={"/create-listing"}> Create Listing </Link>
       </form>
 
       <div className="mt-5 flex justify-between">
@@ -190,8 +192,8 @@ const Profile = () => {
           onClick={handleDeleteUser}
           className="text-red-500 cursor-pointer hover:underline">Delete Account</span>
         <span
-        onClick={handleSignOut}
-        className="text-green-700 cursor-pointer hover:underline">Sign Out</span>
+          onClick={handleSignOut}
+          className="text-green-700 cursor-pointer hover:underline">Sign Out</span>
       </div>
 
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>
