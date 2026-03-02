@@ -13,6 +13,7 @@ export default function CreateListing() {
     const { currentUser } = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [files, setFiles] = useState([]);
+    // we are placing the data here and where ever there would be the requirement i am going to call it 
     const [formData, setFormData] = useState({
         imageUrls: [],
         name: '',
@@ -91,6 +92,7 @@ export default function CreateListing() {
     const handleRemoveImage = (index) => {
         setFormData({
             ...formData,
+            // this underline means never ? what does this never do in the code functionality of it ?  (refer the notes )
             imageUrls: formData.imageUrls.filter((_, i) => i !== index),
         });
     };
@@ -99,30 +101,24 @@ export default function CreateListing() {
         if (e.target.id === 'sale' || e.target.id === 'rent') {
             setFormData({
                 ...formData,
-                type: e.target.id,
-            });
+                type: e.target.id
+            })
         }
 
-        if (
-            e.target.id === 'parking' ||
-            e.target.id === 'furnished' ||
-            e.target.id === 'offer'
-        ) {
+        if (e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer') {
             setFormData({
                 ...formData,
-                [e.target.id]: e.target.checked,
-            });
+                [e.target.id] : e.target.checked
+
+            })
         }
 
-        if (
-            e.target.type === 'number' ||
-            e.target.type === 'text' ||
-            e.target.type === 'textarea'
-        ) {
+        if (e.target.type === 'number' || e.target.type === 'text' || e.target.type === 'textarea') {
             setFormData({
                 ...formData,
-                [e.target.id]: e.target.value,
-            });
+                [e.target.id] : e.target.value
+                
+            })
         }
     };
 
@@ -131,6 +127,7 @@ export default function CreateListing() {
         try {
             if (formData.imageUrls.length < 1)
                 return setError('You must upload at least one image');
+            // by adding plus sign in the begining of them the statement will be converted to number 
             if (+formData.regularPrice < +formData.discountPrice)
                 return setError('Discount price must be lower than regular price');
             setLoading(true);
@@ -161,6 +158,7 @@ export default function CreateListing() {
             <h1 className='text-3xl font-semibold text-center my-7'>
                 Create a Listing
             </h1>
+            {/* onSubmit is the eventListener */}
             <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
                 {/* 1st section started */}
                 <div className='flex flex-col gap-4 flex-1'>
@@ -342,6 +340,8 @@ export default function CreateListing() {
                     <p className='text-red-700 text-sm'>
                         {imageUploadError && imageUploadError}
                     </p>
+
+                    {/* see the explantion of the code on the realestateApp/frontAndBackendNotes/notes.md */}
                     {formData.imageUrls.length > 0 &&
                         formData.imageUrls.map((url, index) => (
                             <div
