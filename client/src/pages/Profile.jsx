@@ -140,12 +140,12 @@ const Profile = () => {
         method: 'DELETE'
       })
       const data = await res.json()
-      if(data.success === false) {
+      if (data.success === false) {
         console.log(data.message);
         return
       }
 
-      setUserListings((prev)=> prev.filter((listing) => listing._id !== listingId))
+      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId))
     } catch (error) {
       console.log(error.message);
     }
@@ -257,8 +257,9 @@ const Profile = () => {
                   className='text-red-700 uppercase'>
                   Delete
                 </button>
-                <button
-                  className='text-green-700 w-full'>Edit</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 w-full'>Edit</button>
+                </Link>
               </div>
             </div>
           ))}
