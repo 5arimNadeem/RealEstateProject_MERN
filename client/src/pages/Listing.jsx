@@ -26,7 +26,14 @@ export default function Listing() {
     const [copied, setCopied] = useState(false);
     const [contact, setContact] = useState(false);
     const params = useParams();
+    
+    // if this would be the case than it would just be the user not the current user so we need to destructure the variable. why is that the case ? we need to do the research on it 
+    // const  currentUser  = useSelector((state) => state.user);
     const { currentUser } = useSelector((state) => state.user);
+
+    // do check the notes for the explanation of it 
+
+
 
     useEffect(() => {
         const fetchListing = async () => {
@@ -136,6 +143,7 @@ export default function Listing() {
                                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
                             </li>
                         </ul>
+                        {/* this userRef and _id and comming from the model class  */}
                         {currentUser && listing.userRef !== currentUser._id && !contact && (
                             <button
                                 onClick={() => setContact(true)}
