@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// dispatcher for using redux 
+// dispatcher for using redux
 import { useDispatch, useSelector } from 'react-redux';
 import {
   signInStart,
@@ -75,6 +75,7 @@ export default function SignIn() {
         <Link to={'/sign-up'}>
           <span className='text-blue-700'>Sign up</span>
         </Link>
+        // <p>That is how the account if logged it</p>
       </div>
       {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
