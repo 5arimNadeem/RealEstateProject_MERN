@@ -29,8 +29,10 @@ export default function Header() {
     you can see the code above too in order to get the idea about it
     */
     const { currentUser } = useSelector((state) => state.user);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); 
     const navigate = useNavigate();
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
