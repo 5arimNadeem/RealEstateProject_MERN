@@ -1,11 +1,5 @@
 import { useState } from 'react';
-import {
-    getDownloadURL,
-    getStorage,
-    ref,
-    uploadBytesResumable,
-} from 'firebase/storage';
-import { app } from '../firebase';
+import { uploadImage } from '../utils/uploadImage';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,30 +57,9 @@ export default function CreateListing() {
     };
 
     const storeImage = async (file) => {
-        return new Promise((resolve, reject) => {
-            // firebase object in orderr to create the firebase instance which aids in storing the data 
-            const storage = getStorage(app);
-            const fileName = new Date().getTime() + file.name;
-            const storageRef = ref(storage, fileName);
-            const uploadTask = uploadBytesResumable(storageRef, file);
-            uploadTask.on(
-                'state_changed',
-                (snapshot) => {
-                    const progress =
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log(`Upload is ${progress}% done`);
-                },
-                (error) => {
-                    reject(error);
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref)
-                        .then((downloadURL) => {
-                            resolve(downloadURL);
-                        });
-                }
-            );
-        });
+        // Uploads the image to Cloudinary (signed direct upload) and
+        // resolves with its hosted URL.
+        return uploadImage(file);
     };
 
     const handleRemoveImage = (index) => {

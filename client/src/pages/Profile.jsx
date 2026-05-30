@@ -2,8 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { useRef } from 'react';
 import { useState, useEffect } from 'react';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { app } from '../firebase.js';
+import { uploadImage } from '../utils/uploadImage.js';
 import { deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice.js';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -28,30 +27,17 @@ const Profile = () => {
     }
   }, [file]);
 
-  const handleFileUpload = (file) => {
-    const storage = getStorage(app);
-    const file_name = new Date().getTime() + '-' + file.name;
-    const storageRef = ref(storage, file_name);
-    const uploadTask = uploadBytesResumable(storageRef, file)
-
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // console.log('Upload is ' + progress + '% done');
-        setFilePercentage(Math.round(progress));
-      },
-      (error) => {
-        // console.error('Upload failed:', error);
-        setFileUploadError(true)
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref)
-          .then((downloadURL) => {
-            // console.log('File available at', downloadURL);
-            setFormData({ ...formData, avatar: downloadURL });
-          });
-      }
-    )
+  const handleFileUpload = async (file) => {
+    try {
+      setFileUploadError(false)
+      setFilePercentage(0)
+      const downloadURL = await uploadImage(file, (progress) => {
+        setFilePercentage(progress)
+      })
+      setFormData({ ...formData, avatar: downloadURL });
+    } catch (error) {
+      setFileUploadError(true)
+    }
   };
 
   const handleChange = (e) => {

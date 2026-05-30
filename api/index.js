@@ -6,16 +6,10 @@ dotenv.config()
 import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
 import listingRouter from './routes/listing.route.js'
+import uploadRouter from './routes/upload.route.js'
 import cookieParser from 'cookie-parser'
 
-mongoose.connect(process.env.MONGO_DB_URL)
-    .then(() => console.log('✅ MongoDB connected successfully'))
-    .catch(err => console.log('❌ MongoDB connection error:', err.message))
-
 const app = express()
-
-
-
 
 /*
 ## **`app.use(express.json())` - Simple Explanation**
@@ -63,77 +57,56 @@ app.post('/register', (req, res) => {
 
 ---
 
-## **Real Example from Your Code**
-
-```javascript
-export const register = async (req, res) => {
-  const { name, email, password } = req.body  
-  // ↑ This ONLY works because of express.json()
-}
-```
-
-**Without `express.json()`:**
-- `req.body` = `undefined`
-- `name`, `email`, `password` = all `undefined`
-- Your registration fails! 💥
-
----
-
-## **What Happens Behind the Scenes**
-
-1. **Client sends:** 
-   ```json
-   { "name": "Sam", "email": "sam@example.com", "password": "123" }
-   ```
-
-2. **Express receives:** Raw text string
-   ```
-   '{"name":"Sam","email":"sam@example.com","password":"123"}'
-   ```
-
-3. **`express.json()` converts:** String → JavaScript Object
-   ```javascript
-   { name: 'Sam', email: 'sam@example.com', password: '123' }
-   ```
-
-4. **Attaches to:** `req.body`
-
----
-
 ## **One-Sentence Summary**
 
 **`app.use(express.json())`** tells Express to **automatically convert incoming JSON strings into JavaScript objects** so you can access them via `req.body`.
-
----
-
-## **Related Middlewares**
-
-```javascript
-app.use(express.json())           // Parses JSON data
-app.use(express.urlencoded({ extended: true }))  // Parses form data
-app.use(cookieParser())           // Parses cookies
-```
-
-**All serve the same purpose:** Make different types of data accessible in your controllers! 🎯
 */
 app.use(express.json())
 
 app.use(cookieParser())
 
+// On Vercel the app runs as a serverless function, so a single long-lived
+// `mongoose.connect()` at startup is not reliable — each cold start would
+// reconnect. We cache the connection promise and reuse it across invocations.
+let connectionPromise = null
+const connectDB = () => {
+  if (!connectionPromise) {
+    connectionPromise = mongoose
+      .connect(process.env.MONGO_DB_URL)
+      .then((conn) => {
+        console.log('✅ MongoDB connected successfully')
+        return conn
+      })
+      .catch((err) => {
+        // Reset so the next request can try again instead of caching a failure.
+        connectionPromise = null
+        console.log('❌ MongoDB connection error:', err.message)
+        throw err
+      })
+  }
+  return connectionPromise
+}
 
-app.listen(process.env.PORT, () => console.log('server is running ' + process.env.PORT))
+// Ensure the DB is connected before any route handler runs.
+app.use(async (req, res, next) => {
+  try {
+    await connectDB()
+    next()
+  } catch (err) {
+    next(err)
+  }
+})
 
-
-
-// api routes 
+// api routes
 
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/listing', listingRouter)
+app.use('/api/upload', uploadRouter)
 
-// middleware 
+// middleware
 
-app.use((err, req, res, next)=> {
+app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || 'internal server error'
   return res.status(statusCode).json({
@@ -143,3 +116,12 @@ app.use((err, req, res, next)=> {
     message,
   })
 })
+
+// Only start a long-running server locally. On Vercel the exported `app` is
+// used as the serverless request handler, so we must NOT call app.listen().
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000
+  app.listen(PORT, () => console.log('server is running ' + PORT))
+}
+
+export default app

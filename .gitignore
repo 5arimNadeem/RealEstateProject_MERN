@@ -1,0 +1,25 @@
+# dependencies
+node_modules
+client/node_modules
+
+# env / secrets
+.env
+.env.*
+!.env.example
+client/.env
+client/.env.*
+!client/.env.example
+
+# build output
+dist
+client/dist
+
+# vercel
+.vercel
+
+# logs
+*.log
+npm-debug.log*
+
+# os
+.DS_Store
