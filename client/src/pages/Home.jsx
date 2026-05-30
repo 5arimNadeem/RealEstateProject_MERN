@@ -71,9 +71,9 @@ export default function Home() {
   };
 
   const testimonials = [
-    { name: "John Doe", comment: "Al-Rehman Estate helped me find my dream home in record time. Their service is unparalleled!", rating: 5 },
-    { name: "Jane Smith", comment: "The team at Al-Rehman Estate is professional, knowledgeable, and always goes the extra mile.", rating: 5 },
-    { name: "Mike Johnson", comment: "I've worked with many real estate agencies, but Al-Rehman Estate stands out for their dedication and expertise.", rating: 4 },
+    { name: "John Doe", comment: "Sarim Estate helped me find my dream home in record time. Their service is unparalleled!", rating: 5 },
+    { name: "Jane Smith", comment: "The team at Sarim Estate is professional, knowledgeable, and always goes the extra mile.", rating: 5 },
+    { name: "Mike Johnson", comment: "I've worked with many real estate agencies, but Sarim Estate stands out for their dedication and expertise.", rating: 4 },
   ];
 
   return (
@@ -110,7 +110,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-7xl font-bold mb-4 text-shadow-xl"
           >
-            Welcome to Al-Rehman Estate
+            Welcome to Sarim Estate
           </motion.h1>
 
           <motion.p
@@ -346,7 +346,7 @@ export default function Home() {
       <section className="py-16 bg-gray-200 text-[#647491]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4 text-[#3a456b]">Ready to Find Your Dream Home?</h2>
-          <p className="text-xl mb-8 text-[#4e5f7a]">Let Al-Rehman Estate guide you to your perfect property</p>
+          <p className="text-xl mb-8 text-[#4e5f7a]">Let Sarim Estate guide you to your perfect property</p>
           <Link to="/search" className="inline-block bg-[#647491] text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-[#505f7a] transition duration-300">
             Start Your Journey <ChevronRight className="inline-block ml-2 h-5 w-5" />
           </Link>

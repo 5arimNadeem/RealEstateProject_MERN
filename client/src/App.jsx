@@ -21,8 +21,8 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
-        <Route path='/about' element={<Search />} />
-        <Route path='/search' element={<About />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/search' element={<Search />} />
         <Route path='/listing/:listingId' element={<Listing />} />
         {/* <Route path='/listing' element={<Listing />} /> */}
         {/* it is making the profile section secure only when the sign-in will be made the profile section will be displayed otherwise these are not going to be displayed */}
